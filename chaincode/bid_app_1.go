@@ -705,6 +705,7 @@ func PostAuctionRequest(stub shim.ChaincodeStubInterface, function string, args 
 		// The 2016 is a dummy key and has notr value other than to get all rows
 
 		keys := []string{args[0]}
+		fmt.Println("keys is : ", keys)
 		fmt.Println("PostAuctionRequest() : TenderId published is : ", args[0])
 		err = UpdateLedger(stub, "TenderTable", keys, buff)
 		if err != nil {
