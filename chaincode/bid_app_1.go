@@ -511,6 +511,14 @@ func ProcessQueryResult(stub shim.ChaincodeStubInterface, Avalbytes []byte, args
 		fmt.Println("ProcessRequestType() : ", ur)
 		return err
 
+	case "TENDER":
+		tender, err := JSONtoUser(Avalbytes) //
+		if err != nil {
+			return err
+		}
+		fmt.Println("ProcessRequestType() : ", tender)
+		return err
+
 	/*case "AUCREQ":
 	case "OPENAUC":
 	case "CLAUC":
