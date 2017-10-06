@@ -1,0 +1,78 @@
+version: "2"
+services:
+  membersrvc:
+    build:
+      context: membersrvc
+    command: membersrvc
+    ports:
+      - "7054:7054"
+  vp0:
+    image: hyperledger/fabric-peer:latest
+    extends:
+      file: base/peer-secure-pbft-base.yaml
+      service: peer-secure-pbft-base
+    command: "sh -c 'while ! nc membersrvc 7054; do sleep 1; done; peer node start'"
+    ports:
+      - "7050:7050"
+      - "7051:7051"
+      - "7053:7053"
+    environment:
+      - CORE_PEER_ID=vp0
+      - CORE_SECURITY_ENROLLID=test_vp0
+      - CORE_SECURITY_ENROLLSECRET=MwYpmSRjupbT 
+    links:
+      - membersrvc
+  vp1:
+    image: hyperledger/fabric-peer:latest
+    extends:
+      file: base/peer-secure-pbft-base.yaml
+      service: peer-secure-pbft-base    
+    command: "sh -c 'while ! nc membersrvc 7054; do sleep 1; done; peer node start'"
+    ports:
+      - "8050:7050"
+      - "8051:7051"
+      - "8053:7053"
+    environment:
+      - CORE_PEER_DISCOVERY_ROOTNODE=vp0:7051
+      - CORE_PEER_ID=vp1
+      - CORE_SECURITY_ENROLLID=test_vp1
+      - CORE_SECURITY_ENROLLSECRET=5wgHK9qqYaPy
+    links:
+      - vp0
+      - membersrvc 
+  vp2:
+    image: hyperledger/fabric-peer:latest
+    extends:
+      file: base/peer-secure-pbft-base.yaml
+      service: peer-secure-pbft-base    
+    command: "sh -c 'while ! nc membersrvc 7054; do sleep 1; done; peer node start'"
+    ports:
+      - "9050:7050"
+      - "9051:7051"
+      - "9053:7053"
+    environment:
+      - CORE_PEER_DISCOVERY_ROOTNODE=vp0:7051
+      - CORE_PEER_ID=vp2
+      - CORE_SECURITY_ENROLLID=test_vp2
+      - CORE_SECURITY_ENROLLSECRET=vQelbRvja7cJ
+    links:
+      - membersrvc
+      - vp0
+  vp3:
+    image: hyperledger/fabric-peer:latest
+    extends:
+      file: base/peer-secure-pbft-base.yaml
+      service: peer-secure-pbft-base
+    command: "sh -c 'while ! nc membersrvc 7054; do sleep 1; done; peer node start'"
+    ports:
+      - "10050:7050"
+      - "10051:7051"
+      - "10053:7053"
+    environment:
+      - CORE_PEER_DISCOVERY_ROOTNODE=vp0:7051
+      - CORE_PEER_ID=vp3
+      - CORE_SECURITY_ENROLLID=test_vp3
+      - CORE_SECURITY_ENROLLSECRET=9LKqKH5peurL
+    links:
+      - membersrvc
+      - vp0
